@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./js/jquery.js"></script>
+  <script src="./js/handlebars.js"></script>
+
+  <style>
+
+    .one {
+      width: 300px;
+      margin: 10px;
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+
+  </div>
+  <script id="card-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <div class="one">
+      <div>{{chinese @index}}</div>
+      
+      <div>姓名：{{name}}</div>
+
+      {{#if birthday}}
+      <div>出生日期：{{birthday}}</div>
+      {{/if}}
+
+      {{!-- 注释--}}
+      <div>出生地:{{place}}</div>
+      <div>工作:{{job}}</div>
+      <ul>
+        {{#each books}}
+        <li 
+          {{#isfirst @index}} style="color:#fff" {{/isfirst}}
+          {{#ismore ../books}} style="color:aqua" {{/ismore}}
+        >
+          {{addone @../index}}-{{addone @index}} : {{this}}
+        </li>
+        {{/each}}
+      </ul>
+    </div>
+    {{/each}}
+  </script>
+  <script>
+    var data = [
+      {
+        name: 'jade',
+        birthday: '19940215',
+        place: '非洲',
+        job: '嫖客',
+        books: [
+          'hbs1',
+          'hbs2',
+          'hbs3',
+        ]
+      }, {
+        name: 'jade',
+        birthday: '19940215',
+        place: '非洲',
+        job: '嫖客',
+        books: [
+          'hbs1',
+          'hbs2',
+          'hbs3',
+        ]
+      },
+      {
+        name: 'jade',
+        place: '非洲',
+        job: '嫖客',
+        books: [
+          'hbs1',
+          'hbs2',
+          'hbs3',
+        ]
+      },
+    ]
+    Handlebars.registerHelper("chinese", function(value){
+      var arr = ['一','二','三']
+      return arr[value]
+    })
+    Handlebars.registerHelper("addone", function(value){
+      
+      return value + 1
+    })
+    Handlebars.registerHelper("isfirst", function(value,options){
+      if(value == 0){
+        return options.fn(this)
+      }
+      
+    })
+    Handlebars.registerHelper("ismore", function(value,options){
+      if(value && value.length > 2){
+        return options.fn(this)
+      }
+      
+    })
+    var htmlContent = Handlebars.compile(
+      document.getElementById('card-template').innerHTML
+    )
+    htmlContent = htmlContent(data);
+    document.getElementsByClassName('card')[0].innerHTML = htmlContent
+
+    // var t = $('#card-template').html()
+    // console.log(t)
+    // var f = Handlebars.compile(t);
+    // var h = f(data)
+    // $('.card').html(h)
+  </script>
+</body>
+
+</html>
